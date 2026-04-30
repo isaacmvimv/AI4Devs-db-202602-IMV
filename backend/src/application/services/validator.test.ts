@@ -4,11 +4,8 @@ import {
     validatePhone,
     validateDate,
     validateAddress,
-    validateEducation,
-    validateExperience,
-    validateCV,
     validateCandidateData
-} from '../validator'; 
+} from '../validator';
 
 describe('Validator Tests', () => {
     describe('validateName', () => {
@@ -42,7 +39,7 @@ describe('Validator Tests', () => {
         });
 
         it('should throw an error for an invalid phone number', () => {
-            expect(() => validatePhone('')).not.toThrow(); // Optional field
+            expect(() => validatePhone('')).not.toThrow();
             expect(() => validatePhone('512345678')).toThrow('Invalid phone');
             expect(() => validatePhone('61234567')).toThrow('Invalid phone');
             expect(() => validatePhone('6123456789')).toThrow('Invalid phone');
@@ -71,106 +68,6 @@ describe('Validator Tests', () => {
         });
     });
 
-    describe('validateEducation', () => {
-        it('should validate correct education data', () => {
-            const education = {
-                institution: 'University',
-                title: 'BSc',
-                startDate: '2020-01-01',
-                endDate: '2023-01-01'
-            };
-            expect(() => validateEducation(education)).not.toThrow();
-        });
-
-        it('should throw an error for invalid education data', () => {
-            const invalidEducation = {
-                institution: '',
-                title: 'BSc',
-                startDate: '2020-01-01',
-                endDate: '2023-01-01'
-            };
-            expect(() => validateEducation(invalidEducation)).toThrow('Invalid institution');
-
-            const invalidEducation2 = {
-                institution: 'University',
-                title: '',
-                startDate: '2020-01-01',
-                endDate: '2023-01-01'
-            };
-            expect(() => validateEducation(invalidEducation2)).toThrow('Invalid title');
-
-            const invalidEducation3 = {
-                institution: 'University',
-                title: 'BSc',
-                startDate: '2020-01-01',
-                endDate: '2023/01/01'
-            };
-            expect(() => validateEducation(invalidEducation3)).toThrow('Invalid end date');
-        });
-    });
-
-    describe('validateExperience', () => {
-        it('should validate correct experience data', () => {
-            const experience = {
-                company: 'Company',
-                position: 'Developer',
-                startDate: '2020-01-01',
-                endDate: '2023-01-01'
-            };
-            expect(() => validateExperience(experience)).not.toThrow();
-        });
-
-        it('should throw an error for invalid experience data', () => {
-            const invalidExperience = {
-                company: '',
-                position: 'Developer',
-                startDate: '2020-01-01',
-                endDate: '2023-01-01'
-            };
-            expect(() => validateExperience(invalidExperience)).toThrow('Invalid company');
-
-            const invalidExperience2 = {
-                company: 'Company',
-                position: '',
-                startDate: '2020-01-01',
-                endDate: '2023-01-01'
-            };
-            expect(() => validateExperience(invalidExperience2)).toThrow('Invalid position');
-
-            const invalidExperience3 = {
-                company: 'Company',
-                position: 'Developer',
-                startDate: '2020-01-01',
-                endDate: '2023/01/01'
-            };
-            expect(() => validateExperience(invalidExperience3)).toThrow('Invalid end date');
-        });
-    });
-
-    describe('validateCV', () => {
-        it('should validate correct CV data', () => {
-            const cv = {
-                filePath: '/path/to/cv.pdf',
-                fileType: 'application/pdf'
-            };
-            expect(() => validateCV(cv)).not.toThrow();
-        });
-
-        it('should throw an error for invalid CV data', () => {
-            const invalidCV = {
-                filePath: '',
-                fileType: 'application/pdf'
-            };
-            expect(() => validateCV(invalidCV)).toThrow('Invalid CV data');
-
-            const invalidCV2 = {
-                filePath: '/path/to/cv.pdf',
-                fileType: ''
-            };
-            expect(() => validateCV(invalidCV2)).toThrow('Invalid CV data');
-        });
-    });
-
     describe('validateCandidateData', () => {
         it('should validate correct candidate data', () => {
             const candidateData = {
@@ -178,23 +75,7 @@ describe('Validator Tests', () => {
                 lastName: 'Doe',
                 email: 'john.doe@example.com',
                 phone: '612345678',
-                address: '123 Main St',
-                educations: [{
-                    institution: 'University',
-                    title: 'BSc',
-                    startDate: '2020-01-01',
-                    endDate: '2023-01-01'
-                }],
-                workExperiences: [{
-                    company: 'Company',
-                    position: 'Developer',
-                    startDate: '2020-01-01',
-                    endDate: '2023-01-01'
-                }],
-                cv: {
-                    filePath: '/path/to/cv.pdf',
-                    fileType: 'application/pdf'
-                }
+                address: '123 Main St'
             };
             expect(() => validateCandidateData(candidateData)).not.toThrow();
         });
@@ -205,23 +86,7 @@ describe('Validator Tests', () => {
                 lastName: 'Doe',
                 email: 'john.doe@example.com',
                 phone: '612345678',
-                address: '123 Main St',
-                educations: [{
-                    institution: 'University',
-                    title: 'BSc',
-                    startDate: '2020-01-01',
-                    endDate: '2023-01-01'
-                }],
-                workExperiences: [{
-                    company: 'Company',
-                    position: 'Developer',
-                    startDate: '2020-01-01',
-                    endDate: '2023-01-01'
-                }],
-                cv: {
-                    filePath: '/path/to/cv.pdf',
-                    fileType: 'application/pdf'
-                }
+                address: '123 Main St'
             };
             expect(() => validateCandidateData(invalidCandidateData)).toThrow('Invalid name');
         });

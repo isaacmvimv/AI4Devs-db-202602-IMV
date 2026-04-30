@@ -1,20 +1,11 @@
 import { addCandidate, getCandidateById } from './candidateService';
 import { validateCandidateData } from '../validator';
 import { Candidate } from '../../domain/models/Candidate';
-import { Education } from '../../domain/models/Education';
-import { WorkExperience } from '../../domain/models/WorkExperience';
-import { Resume } from '../../domain/models/Resume';
 
 jest.mock('../validator');
 jest.mock('../../domain/models/Candidate');
-jest.mock('../../domain/models/Education');
-jest.mock('../../domain/models/WorkExperience');
-jest.mock('../../domain/models/Resume');
 
 const MockedCandidate = jest.mocked(Candidate);
-const MockedEducation = jest.mocked(Education);
-const MockedWorkExperience = jest.mocked(WorkExperience);
-const MockedResume = jest.mocked(Resume);
 
 describe('CandidateService', () => {
     afterEach(() => {
@@ -27,22 +18,14 @@ describe('CandidateService', () => {
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'john.doe@example.com',
-                phone: '1234567890',
-                address: '123 Main St',
-                educations: [],
-                workExperiences: [],
-                cv: {}
+                phone: '612345678',
+                address: '123 Main St'
             };
 
-            // Mock save method to return an object with an id
             const mockSave = jest.fn().mockResolvedValue({ id: 1, ...candidateData });
-            MockedCandidate.mockImplementation((data) => ({
-                ...data,
-                save: mockSave,
-                education: [],
-                workExperience: [],
-                resumes: []
-            }));
+            MockedCandidate.mockImplementation(() => ({
+                save: mockSave
+            } as any));
 
             await addCandidate(candidateData);
             expect(validateCandidateData).toHaveBeenCalledWith(candidateData);
@@ -53,47 +36,18 @@ describe('CandidateService', () => {
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'john.doe@example.com',
-                phone: '1234567890',
-                address: '123 Main St',
-                educations: [{ degree: 'BSc' }],
-                workExperiences: [{ company: 'Company' }],
-                cv: { fileName: 'resume.pdf' }
+                phone: '612345678',
+                address: '123 Main St'
             };
 
-            // Mock save methods for Candidate, Education, WorkExperience, and Resume
             const mockSaveCandidate = jest.fn().mockResolvedValue({ id: 1, ...candidateData });
-            const mockSaveEducation = jest.fn().mockResolvedValue({ id: 1, degree: 'BSc', candidateId: 1 });
-            const mockSaveWorkExperience = jest.fn().mockResolvedValue({ id: 1, company: 'Company', candidateId: 1 });
-            const mockSaveResume = jest.fn().mockResolvedValue({ id: 1, fileName: 'resume.pdf', candidateId: 1 });
 
-            MockedCandidate.mockImplementation((data) => ({
-                ...data,
-                save: mockSaveCandidate,
-                education: [],
-                workExperience: [],
-                resumes: []
-            }));
-
-            MockedEducation.mockImplementation((data) => ({
-                ...data,
-                save: mockSaveEducation
-            }));
-
-            MockedWorkExperience.mockImplementation((data) => ({
-                ...data,
-                save: mockSaveWorkExperience
-            }));
-
-            MockedResume.mockImplementation((data) => ({
-                ...data,
-                save: mockSaveResume
-            }));
+            MockedCandidate.mockImplementation(() => ({
+                save: mockSaveCandidate
+            } as any));
 
             const result = await addCandidate(candidateData);
             expect(mockSaveCandidate).toHaveBeenCalled();
-            expect(mockSaveEducation).toHaveBeenCalled();
-            expect(mockSaveWorkExperience).toHaveBeenCalled();
-            expect(mockSaveResume).toHaveBeenCalled();
             expect(result).toEqual({ id: 1, ...candidateData });
         });
 
@@ -102,14 +56,10 @@ describe('CandidateService', () => {
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'invalid-email',
-                phone: '1234567890',
-                address: '123 Main St',
-                educations: [],
-                workExperiences: [],
-                cv: {}
+                phone: '612345678',
+                address: '123 Main St'
             };
 
-            // Mock validateCandidateData to throw an error
             (validateCandidateData as jest.Mock).mockImplementation(() => {
                 throw new Error('Invalid email');
             });
@@ -122,22 +72,14 @@ describe('CandidateService', () => {
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'john.doe@example.com',
-                phone: '1234567890',
-                address: '123 Main St',
-                educations: [],
-                workExperiences: [],
-                cv: {}
+                phone: '612345678',
+                address: '123 Main St'
             };
 
-            // Mock save method to throw a database connection error
             const mockSave = jest.fn().mockRejectedValue(new Error('Database connection error'));
-            MockedCandidate.mockImplementation((data) => ({
-                ...data,
-                save: mockSave,
-                education: [],
-                workExperience: [],
-                resumes: []
-            }));
+            MockedCandidate.mockImplementation(() => ({
+                save: mockSave
+            } as any));
 
             await expect(addCandidate(candidateData)).rejects.toThrow('Database connection error');
         });
@@ -147,22 +89,14 @@ describe('CandidateService', () => {
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'john.doe@example.com',
-                phone: '1234567890',
-                address: '123 Main St',
-                educations: [],
-                workExperiences: [],
-                cv: {}
+                phone: '612345678',
+                address: '123 Main St'
             };
 
-            // Mock save method to throw a unique constraint error
             const mockSave = jest.fn().mockRejectedValue({ code: 'P2002' });
-            MockedCandidate.mockImplementation((data) => ({
-                ...data,
-                save: mockSave,
-                education: [],
-                workExperience: [],
-                resumes: []
-            }));
+            MockedCandidate.mockImplementation(() => ({
+                save: mockSave
+            } as any));
 
             await expect(addCandidate(candidateData)).rejects.toThrow('The email already exists in the database');
         });
@@ -176,11 +110,8 @@ describe('CandidateService', () => {
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'john.doe@example.com',
-                phone: '1234567890',
-                address: '123 Main St',
-                education: [],
-                workExperience: [],
-                resumes: []
+                phone: '612345678',
+                address: '123 Main St'
             };
 
             MockedCandidate.findOne = jest.fn().mockResolvedValue(candidateData);

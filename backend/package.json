@@ -9,6 +9,8 @@
         "build": "tsc",
         "prisma:init": "npx prisma init",
         "prisma:generate": "npx prisma generate",
+        "prisma:migrate": "prisma migrate dev",
+        "prisma:migrate:deploy": "prisma migrate deploy",
         "start:prod": "npm run build && npm start",
         "test": "jest" 
     },
